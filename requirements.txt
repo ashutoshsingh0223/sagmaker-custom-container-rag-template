@@ -1,0 +1,12 @@
+fastapi
+-f https://download.pytorch.org/whl/torch_stable.html
+torch==2.1.0+cpu 
+uvicorn
+openai==0.28.1
+sentence-transformers==2.2.2
+InstructorEmbedding==1.0.1
+langchain==0.0.323
+llama-hub==0.0.39
+llama-index==0.8.50
+s3fs
+requests
