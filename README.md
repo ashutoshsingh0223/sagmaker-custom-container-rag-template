@@ -5,7 +5,7 @@ Template for a RAG system using sagemaker model Endpoints and Batch transform jo
 https://medium.com/@ashutosh.singh.de/rag-with-aws-sagemaker-step-by-step-guide-1ad970cc43f6
 
 ## Code architecture
-![code-architecture]("./images/code-architecture.jpg")
+![code-architecture](images/code-architecture.jpg)
 
 ## Build Image
 
