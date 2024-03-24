@@ -12,7 +12,7 @@ from langchain.vectorstores import ElasticVectorSearch
 import inference
 
 
-class EmbedderRetriever(object):
+class Processor(object):
     def __init__(
         self,
         model_cache_dir,
