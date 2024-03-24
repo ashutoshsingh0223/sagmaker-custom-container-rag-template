@@ -7,7 +7,7 @@ import requests
 from fastapi import FastAPI, Request
 import uvicorn
 
-import transformer
+import processor
 import constants
 
 
@@ -33,7 +33,52 @@ async def inference(request: Request):
 
     elastic_host = manifest["elastic_host"]
 
+    if job_type == 'embed':
+        query = manifest['query']
+        t = transformer.Transformer(
+            model_cache_dir=constants.MODEL_CACHE_DIR_HF,
+            client=client,
+            project=project,
+            elastic_host=elastic_host,
+            environment=environment
+        )
 
+        docs = t.search(query)
+        return {"docs": docs}
+    else:
+
+        st = time.time()
+        import reader
+        try:
+            documents = manifest['documents']
+            r = reader.DocReader(docs=documents)
+            t = processor.Processor(
+                model_cache_dir="/opt/ml/model",
+                client=client,
+                project=project,
+                elastic_host=elastic_host,
+                environment=environment
+            )
+            lanchain_docs = r.get_documents()
+            t.embed_documents(documents=lanchain_docs)
+
+            success = True
+            error = ''
+        except Exception as e:
+            success = False
+            error = traceback.format_exc()
+
+        et = time.time()
+
+        callback = {
+                        "success": success,
+                        "file_ids": file_ids,
+                        "job_name": job_name,
+                        "time": et - st,
+                        "error": error
+                    }
+        headers = {"Content-Type": "application/json"}
+        requests.post(callback_url, json=callback, headers=headers)
    
 
         callback = {
